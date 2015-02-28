@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22512.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSharpWebSite", "FSharpWebSite\FSharpWebSite.csproj", "{2819B8DC-8A89-418F-B10F-66AC877DCD08}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishScripts", "PublishScripts", "{37FB0430-0B83-4AC6-B649-863B5BD3975A}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\AzureWebsitePublishModule.psm1 = PublishScripts\AzureWebsitePublishModule.psm1
+		PublishScripts\Publish-WebApplicationWebsite.ps1 = PublishScripts\Publish-WebApplicationWebsite.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{63F4FE6D-7AEE-4E26-81CB-757EE3AF630D}"
+	ProjectSection(SolutionItems) = preProject
+		PublishScripts\Configurations\FSharpWebSite-WAWS-dev.json = PublishScripts\Configurations\FSharpWebSite-WAWS-dev.json
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpWeb.Controllers", "FSharpWeb.Controllers\FSharpWeb.Controllers.fsproj", "{EE4AB65D-968B-4726-A0D9-47145E962983}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpDocumentDb", "CSharpDocumentDb\CSharpDocumentDb.csproj", "{1DA2F20C-D7B2-4091-ABF9-42FC02F0B4EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2819B8DC-8A89-418F-B10F-66AC877DCD08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2819B8DC-8A89-418F-B10F-66AC877DCD08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2819B8DC-8A89-418F-B10F-66AC877DCD08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2819B8DC-8A89-418F-B10F-66AC877DCD08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE4AB65D-968B-4726-A0D9-47145E962983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE4AB65D-968B-4726-A0D9-47145E962983}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE4AB65D-968B-4726-A0D9-47145E962983}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE4AB65D-968B-4726-A0D9-47145E962983}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DA2F20C-D7B2-4091-ABF9-42FC02F0B4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DA2F20C-D7B2-4091-ABF9-42FC02F0B4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DA2F20C-D7B2-4091-ABF9-42FC02F0B4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DA2F20C-D7B2-4091-ABF9-42FC02F0B4EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63F4FE6D-7AEE-4E26-81CB-757EE3AF630D} = {37FB0430-0B83-4AC6-B649-863B5BD3975A}
+	EndGlobalSection
+EndGlobal

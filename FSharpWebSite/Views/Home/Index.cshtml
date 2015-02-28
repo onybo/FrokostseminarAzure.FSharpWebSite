@@ -1,0 +1,37 @@
+﻿@model DocumentDbSample.Core.DocumentRecord
+@using System.Linq
+
+<div class="jumbotron">
+    <h1>F# ASP.NET</h1>
+</div>
+<div class="row" ng-app="app">
+    <div class="col-md-4">
+        <h2>Collection</h2>
+        <p>Collection link is: </p>
+        <p>@Model.id Selflink: @Model.selfLink</p>
+        <p>Number of documents is: @Model.documents.Count()</p>
+        <div>@Html.ActionLink("Create collection", "CreateCollection", "Home")</div>
+        <div>@Html.ActionLink("Delete collection", "DeleteCollection", "Home")</div>
+    </div>
+    <div class="col-md-4">
+        <h2>Add</h2>
+        <p>Enter json to add new document</p>
+        @using (Html.BeginForm())
+        {
+            @Html.TextArea("input");
+            @Html.Hidden("collectionLink", @Model.selfLink)
+            <input type="submit" value="Add">
+        }
+    </div>
+    <div class="col-md-4" ng-controller="PersonController as person">
+        <h2>Query:</h2>
+        <button ng-click="person.click('@Model.selfLink')">read</button>
+        <div ng-repeat="p in person.persons">
+            <div>{</div>
+            <div style="margin-left: 20px;">id = {{p["id@@"]}}</div>
+            <div style="margin-left: 20px;">  name = {{p["name@@"]}}</div>
+            <div style="margin-left: 20px;">  born = {{p["born@@"]}}</div>
+            <div>},</div>
+        </div>
+    </div>
+</div>
