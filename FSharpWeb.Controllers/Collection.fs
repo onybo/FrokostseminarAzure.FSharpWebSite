@@ -6,6 +6,7 @@ open Microsoft.Azure.Documents
 open Microsoft.Azure.Documents.Client
 open Microsoft.Azure.Documents.Linq
 open DocumentDbSample.Core
+open Chessie.ErrorHandling
 
 let private emptyCollection client = {client=client; selfLink=""; documentsLink=""; id=""}
 
@@ -28,7 +29,7 @@ let private getOrCreateCollection_ (db:DatabaseRecord) collectionId = async {
 }
 
 let getOrCreateCollectionSync db =
-    getOrCreateCollection_ db "Persons" |> Async.RunSynchronously |> succeed
+    getOrCreateCollection_ db "Persons" |> Async.RunSynchronously |> ok
 
 let getFirstCollection (db:DatabaseRecord) =
 
@@ -36,4 +37,4 @@ let getFirstCollection (db:DatabaseRecord) =
   let collection = client.CreateDocumentCollectionQuery(db.selfLink).AsEnumerable() |> Seq.tryFind(fun _ -> true)
   match collection with
     | None -> fail "no collection created"
-    | Some(c) -> succeed ({client=client; selfLink=c.SelfLink; documentsLink=c.DocumentsLink; id=c.Id})
+    | Some(c) -> ok ({client=client; selfLink=c.SelfLink; documentsLink=c.DocumentsLink; id=c.Id})

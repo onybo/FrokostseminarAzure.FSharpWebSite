@@ -33,16 +33,16 @@
     <DocumentationFile>bin\Release\FSharpWeb.Controllers.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Chessie">
+      <HintPath>..\packages\Chessie.0.0.7\lib\net40\Chessie.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Dynamitey">
       <HintPath>..\packages\Dynamitey.1.0.2.0\lib\net40\Dynamitey.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Dynamic">
       <HintPath>..\packages\FSharp.Dynamic.1.4.2.0\lib\net40\FSharp.Dynamic.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FSharpx.Core">
-      <HintPath>..\packages\FSharpx.Core.1.8.41\lib\40\FSharpx.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.Documents.Client">

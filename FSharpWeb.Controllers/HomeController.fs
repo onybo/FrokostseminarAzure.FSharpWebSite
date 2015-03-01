@@ -8,9 +8,9 @@ open EkonBenefits.FSharp.Dynamic
 open DocumentDatabase
 open DocumentCollection
 open Document
-open FSharpx.Choice
 open DocumentDbSample.Core
 open Microsoft.Azure.Documents.Client
+open Chessie.ErrorHandling
 
 type HomeController() =
   inherit Controller()

@@ -5,6 +5,7 @@ open Microsoft.Azure.Documents.Client
 open Microsoft.Azure.Documents.Linq
 
 open DocumentDbSample.Core 
+open Chessie.ErrorHandling
 
 let createDocument link doc (client:DocumentClient) = async {
   return! Async.AwaitTask (client.CreateDocumentAsync(link, doc))
@@ -15,7 +16,7 @@ let private createPersonQuery documentsLink (client:DocumentClient) =
 
 let getDocuments (collection:CollectionRecord) =
   let documents = createPersonQuery collection.documentsLink collection.client  //collection.client.CreateDocumentQuery<Person>(collection.documentsLink).ToList()
-  succeed {id=collection.id; selfLink=collection.selfLink; documentsLink=collection.documentsLink; documents = documents;}
+  ok {id=collection.id; selfLink=collection.selfLink; documentsLink=collection.documentsLink; documents = documents;}
   
 let getPersons documentsLink (client:DocumentClient) =
     query { 

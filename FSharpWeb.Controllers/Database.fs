@@ -6,17 +6,18 @@ open Microsoft.Azure.Documents
 open Microsoft.Azure.Documents.Client
 open Microsoft.Azure.Documents.Linq
 open DocumentDbSample.Core
+open Chessie.ErrorHandling
 
 let private databaseId = "OlavsDemoDB"
 
 let private databaseToRecord client id (database:Database option)=
   match database with
-  | Some(db) -> succeed {client=client; id=id; collectionsLink=db.CollectionsLink; selfLink=db.SelfLink}
+  | Some(db) -> ok {client=client; id=id; collectionsLink=db.CollectionsLink; selfLink=db.SelfLink}
   | None -> fail "No database"
 
 let private toDatabaseResult client (db:Database) = function
   | Net.HttpStatusCode.Created -> 
-      succeed {client=client; id=databaseId; collectionsLink=db.CollectionsLink; selfLink=db.SelfLink}
+      ok {client=client; id=databaseId; collectionsLink=db.CollectionsLink; selfLink=db.SelfLink}
   | otherCode ->
       fail ("failed to create database: " + otherCode.ToString())
   
@@ -33,8 +34,8 @@ let getDatabase (client:DocumentClient) =
 let private getOrCreateDatabase (client:DocumentClient) = async {
     let db = getDatabase client
     return! match db with
-            | Choice1Of2 db -> async { return Choice1Of2 db }
-            | Choice2Of2 _ ->  createDatabase client
+            | Ok (db,_) -> async { return ok db }
+            | Fail _ ->  createDatabase client
 }
 
 let deleteDatabaseWithLogging (client:DocumentClient) databaseLink : Async<Net.HttpStatusCode> = async{
@@ -46,11 +47,11 @@ let deleteDatabaseWithLogging (client:DocumentClient) databaseLink : Async<Net.H
 let deleteDatabase client : Async<Net.HttpStatusCode> = async {
   let db = getDatabase client
   return! match db with
-          | Choice2Of2 msg -> async{
+          | Fail msg -> async{
                 Logger.trace "No database to delete"
                 return Net.HttpStatusCode.Gone
               }
-          | Choice1Of2 db -> async{
+          | Ok (db,_) -> async{
               let! result = Async.AwaitTask (client.DeleteDatabaseAsync db.selfLink)
               return result.StatusCode
             }
