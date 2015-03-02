@@ -8,33 +8,28 @@ open Microsoft.Azure.Documents.Linq
 open DocumentDbSample.Core
 open Chessie.ErrorHandling
 
-let private emptyCollection client = {client=client; selfLink=""; documentsLink=""; id=""}
-
 let private createCollection_ (client:DocumentClient) collectionsLink collectionId = async{
   let! response = Async.AwaitTask(client.CreateDocumentCollectionAsync(collectionsLink, new DocumentCollection( Id = collectionId )))
   return match response.StatusCode with
          | Net.HttpStatusCode.Created -> 
-           let x = response.Resource 
-           {client=client; selfLink=x.SelfLink; documentsLink=x.DocumentsLink; id=x.Id}
+           ok response.Resource 
          | _ ->
            printfn "failed to create collection: %s" (response.StatusCode.ToString()) 
-           emptyCollection client
+           fail "failed to create collection"
 }
 
-let private getOrCreateCollection_ (db:DatabaseRecord) collectionId = async {
-  let collection = db.client.CreateDocumentCollectionQuery(db.selfLink).Where(fun c -> c.Id = collectionId).AsEnumerable() |> Seq.tryFind(fun _ -> true)
+let private getOrCreateCollection_ (client:DocumentClient) (db:Database) collectionId = async {
+  let collection = client.CreateDocumentCollectionQuery(db.SelfLink).Where(fun c -> c.Id = collectionId).AsEnumerable() |> Seq.tryFind(fun _ -> true)
   return! match collection with
-          | None -> createCollection_ db.client db.collectionsLink collectionId
-          | Some c -> async { return {client=db.client; selfLink=c.SelfLink; documentsLink=c.DocumentsLink; id=c.Id} }
+          | None -> createCollection_ client db.CollectionsLink collectionId
+          | Some c -> async { return ok c }
 }
 
-let getOrCreateCollectionSync db =
-    getOrCreateCollection_ db "Persons" |> Async.RunSynchronously |> ok
+let getOrCreateCollectionSync (client:DocumentClient) (db:Database) =
+    getOrCreateCollection_ client db "Persons" |> Async.RunSynchronously 
 
-let getFirstCollection (db:DatabaseRecord) =
-
-  let client = db.client;
-  let collection = client.CreateDocumentCollectionQuery(db.selfLink).AsEnumerable() |> Seq.tryFind(fun _ -> true)
-  match collection with
-    | None -> fail "no collection created"
-    | Some(c) -> ok ({client=client; selfLink=c.SelfLink; documentsLink=c.DocumentsLink; id=c.Id})
+let getFirstCollection (client:DocumentClient) (db:Database) =
+  client.CreateDocumentCollectionQuery(db.SelfLink).AsEnumerable() 
+  |> Seq.tryFind(fun _ -> true) 
+  |> failIfNone "no collection created"
+  

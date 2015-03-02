@@ -9,7 +9,7 @@
 
         this.click = function(documentsLink) {
             $log.info("clicked");
-            $http.get('/api/Person?documentsLink=' + documentsLink).
+        	$http.get('/api/Person?documentsLink=' + encodeURIComponent(documentsLink)).
                 success(function (data, status, headers, config) {
                     $log.info("got persons: " + data);
                     vm.persons = data;

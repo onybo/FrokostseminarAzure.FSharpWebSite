@@ -7,8 +7,9 @@
 <div class="row" ng-app="app">
     <div class="col-md-4">
         <h2>Collection</h2>
-        <p>Collection link is: </p>
-        <p>@Model.id Selflink: @Model.selfLink</p>
+        <p>Collection is: @Model.id</p>
+        <p>Selflink: @Model.selfLink</p>
+		<p>Documentslink: @Model.documentsLink</p>
         <p>Number of documents is: @Model.documents.Count()</p>
         <div>@Html.ActionLink("Create collection", "CreateCollection", "Home")</div>
         <div>@Html.ActionLink("Delete collection", "DeleteCollection", "Home")</div>
@@ -19,13 +20,13 @@
         @using (Html.BeginForm())
         {
             @Html.TextArea("input");
-            @Html.Hidden("collectionLink", @Model.selfLink)
+            @Html.Hidden("collectionLink", @Model.documentsLink)
             <input type="submit" value="Add">
         }
     </div>
     <div class="col-md-4" ng-controller="PersonController as person">
         <h2>Query:</h2>
-        <button ng-click="person.click('@Model.selfLink')">read</button>
+        <button ng-click="person.click('@Model.documentsLink')">read</button>
         <div ng-repeat="p in person.persons">
             <div>{</div>
             <div style="margin-left: 20px;">id = {{p["id@@"]}}</div>

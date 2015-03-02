@@ -10,6 +10,7 @@ open DocumentCollection
 open Document
 open DocumentDbSample.Core
 open Microsoft.Azure.Documents.Client
+open Microsoft.Azure.Documents
 open Chessie.ErrorHandling
 
 type HomeController() =
@@ -23,19 +24,7 @@ type HomeController() =
   member private x.toViewResult (documents:DocumentRecord) =
     x.View(documents)
 
-  [<HttpGet>]
-  [<Route("")>]
-  member x.Index() =
-    x.ViewBag?Title <-"F# Home Page"
-
-    use client = getDbClient
-    client
-    |> getDatabase
-    >>= getFirstCollection
-    >>= getDocuments
-    |> valueOrDefault
-    |> x.View
-
+  // Pipelining of Results. Bind Operator >>=
   [<Route("/CreateCollection")>]
   member x.CreateCollection() =
 
@@ -43,17 +32,42 @@ type HomeController() =
     client
     |> createDatabase
     |> Async.RunSynchronously
-    >>= getOrCreateCollectionSync
-    >>= getDocuments
-    |> valueOrDefault
-    |> Logger.traceRecord
+    >>= getOrCreateCollectionSync client
+    >>= getDocuments client
+    |> ignore
     RedirectResult("/")
 
+  member private x.SuccessView collectionAndDocuments =
+    let (collection:DocumentCollection,documents:Collections.Generic.List<Person>),_ = collectionAndDocuments
+    x.View({id=collection.Id; selfLink=collection.SelfLink; documentsLink=collection.DocumentsLink; documents=documents})
+
+  member private x.FailView result =
+   x.View({id="no database"; selfLink="no collection"; documentsLink="no documents"; documents=Seq.empty})
+
+  // Trial computation expression. Collect the partial results of a "pipeline"
+  [<HttpGet>]
+  [<Route("")>]
+  member x.Index() =
+    x.ViewBag?Title <-"F# Home Page"
+
+    use client = getDbClient
+
+    trial {
+      let! collection = client
+                        |> getDatabase
+                        >>= getFirstCollection client
+      let! documents = collection
+                       |> getDocuments client
+      return (collection, documents)
+    } |> either x.SuccessView x.FailView
+
+
+  //async methods in F#
   [<Route("/DeleteCollection")>]
   member x.DeleteCollection() = 
     async {
         let! result = getDbClient |> deleteDatabase        
-        return RedirectResult("/")  //x.Redirect("/")
+        return RedirectResult("/") 
     } |> Async.StartAsTask
       
 

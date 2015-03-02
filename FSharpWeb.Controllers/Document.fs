@@ -1,6 +1,7 @@
 ﻿module Document
 
 open System.Linq
+open Microsoft.Azure.Documents
 open Microsoft.Azure.Documents.Client
 open Microsoft.Azure.Documents.Linq
 
@@ -14,9 +15,9 @@ let createDocument link doc (client:DocumentClient) = async {
 let private createPersonQuery documentsLink (client:DocumentClient) =
     client.CreateDocumentQuery<Person>(documentsLink).ToList()
 
-let getDocuments (collection:CollectionRecord) =
-  let documents = createPersonQuery collection.documentsLink collection.client  //collection.client.CreateDocumentQuery<Person>(collection.documentsLink).ToList()
-  ok {id=collection.id; selfLink=collection.selfLink; documentsLink=collection.documentsLink; documents = documents;}
+let getDocuments (client:DocumentClient) (collection:DocumentCollection) =
+  let documents = createPersonQuery collection.DocumentsLink client  //collection.client.CreateDocumentQuery<Person>(collection.documentsLink).ToList()
+  ok documents
   
 let getPersons documentsLink (client:DocumentClient) =
     query { 
