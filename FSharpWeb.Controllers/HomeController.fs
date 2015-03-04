@@ -4,7 +4,6 @@ open System
 open System.Web
 open System.Web.Routing
 open System.Web.Mvc
-open EkonBenefits.FSharp.Dynamic
 open DocumentDatabase
 open DocumentCollection
 open Document
@@ -45,8 +44,6 @@ type HomeController() =
   [<HttpGet>]
   [<Route("")>]
   member x.Index() =
-    x.ViewBag?Title <-"F# Home Page"
-
     use client = getDbClient
 
     trial {
