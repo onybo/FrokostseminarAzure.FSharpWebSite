@@ -21,9 +21,6 @@ type HomeController() =
     let authKey = toSecureString (System.Configuration.ConfigurationManager.AppSettings.Get("AuthKey"))
     new DocumentClient (uri, authKey=authKey)
 
-  member private x.toViewResult (documents:DocumentRecord) =
-    x.View(documents)
-
   // Pipelining of Results. Bind Operator >>=
   [<Route("/CreateCollection")>]
   member x.CreateCollection() =

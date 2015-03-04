@@ -15,29 +15,13 @@ type Person = {
     id : string 
 }
 
-type CollectionRecord = {
-    client: DocumentClient;
-    selfLink: string;
-    documentsLink: string;
-    id: string;
-}
-
-type DocumentRecord = { 
+type DocumentRecord = {
   id: string;
   selfLink: string;
   documentsLink: string;
   documents: seq<Person>
 }
 
-type DatabaseRecord = {
-  client: DocumentClient;
-  id: string;
-  collectionsLink: string;
-  selfLink: string;
-}
 
-let emptyDocumentRecord = {id=""; selfLink=""; documentsLink=""; documents=Seq.empty<Person>}
 
-let valueOrDefault = function
-  | Ok (x,_) -> x
-  | Fail error -> emptyDocumentRecord
+
