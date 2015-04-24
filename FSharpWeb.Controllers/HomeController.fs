@@ -25,12 +25,11 @@ type HomeController() =
   member x.CreateCollection() =
 
     use client = getDbClient
-    client
-    |> createDatabase
-    |> Async.RunSynchronously
+    ok client
+    >>= tryCreateDatabase
     >>= getOrCreateCollectionSync client
     >>= getDocuments client
-    |> ignore
+    |> Logger.traceResult 
     RedirectResult("/")
 
   member private x.SuccessView collectionAndDocuments =

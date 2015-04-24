@@ -21,6 +21,12 @@ let createDatabase (client:DocumentClient) = async{
   return (toDatabaseResult client result.Resource result.StatusCode)        
 }
 
+let tryCreateDatabase (client:DocumentClient) =
+  try
+    Async.RunSynchronously (createDatabase client)
+  with
+  | exn -> fail (sprintf "failed with exception: %A" exn)
+
 let getDatabase (client:DocumentClient) =
   client.CreateDatabaseQuery().Where(fun db -> db.Id = databaseId).AsEnumerable() 
   |> Seq.tryFind(fun _ -> true) 
@@ -39,7 +45,7 @@ let deleteDatabase client : Async<Net.HttpStatusCode> = async {
                 Logger.trace "No database to delete"
                 return Net.HttpStatusCode.Gone
               }
-          | Ok (db, msgs) -> async{
+          | Ok (db, _) -> async{
               let! result = Async.AwaitTask (client.DeleteDatabaseAsync db.SelfLink)
               return result.StatusCode
             }
