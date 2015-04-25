@@ -1,14 +1,14 @@
 ﻿- title : F# in Azure
 - description : How to use F# to create azure websites and use Azure .NET SDK from F#
 - author : Olav Nybø
-- theme : sky 
+- theme : sky
 - transition : default
 
-*** 
+***
 
 ## Azure Websites
 ![love](images/heart.svg)
-#F# 
+#F#
 
 ***
 
@@ -40,12 +40,12 @@
     public class PersonsController : Controller
     {
       private readonly IPersonRepository _personRepository;
-      
+
       public PersonsController(IPersonRepository personRepository)
       {
         _personRepository = personRepository;
       }
-      
+
       // eg.: /persons
       [Route]
       public ActionResult Index()
@@ -53,7 +53,7 @@
         var persons = _personsRepository.GetPersons();
         return View(persons);
       }
-      
+
       // eg.: /persons/5
       [Route("{personId}")]
       public ActionResult Show(int personId) { ... }
@@ -97,12 +97,12 @@
 
     // simple types in one line
     type Person = {First:string; Last:string}
-    
+
     // complex types in a few lines
     type Employee =
       | Worker of Person
       | Manager of Employee list
-  
+
     // type inference
     let jdoe = {First="John";Last="Doe"}
     let worker = Worker jdoe
@@ -114,7 +114,7 @@
 
 ---
 
-![null reference](images/yoda.gif) 
+![null reference](images/yoda.gif)
 
 ***
 
@@ -134,13 +134,13 @@
 ***
 
 ### Azure DocumentDb struktur
-![DocumentDb](images/DocumentDb.png)
+![DocumentDb](images/DocumentDb_Structure.png)
 
 ***
 
 ## DEMO
 ### [Azure portal](https://portal.azure.com)
- 
+
  - Create database
  - URI and Keys
  - Document Explorer
@@ -153,11 +153,11 @@
 ![python](images/python-logo-generic.svg)
 ![JS Client](images/Unofficial_JavaScript_logo_2.svg.png)
 ![Java](images/java-logo.jpg)
-![Node](images/nodejs.png) 
+![Node](images/nodejs.png)
 
 ***
 
-![null reference](images/railway.png)
+![null reference](images/Railway.png)
 
 
 ***
@@ -206,16 +206,18 @@
 
 Railway oriented programming
 
-![null reference](images/railway.png)
+![null reference](images/Railway.png)
 
 ---
 
 ### Chessie
 
-    type Result<'TSuccess, 'TMessage> = 
-    | Ok of 'TSuccess * 'TMessage list
-    | Fail of 'TMessage list
-
+    /// Represents the result of a computation.
+    type Result<'TSuccess, 'TMessage> =
+      /// Represents the result of a successful computation.
+      | Ok of 'TSuccess * 'TMessage list
+      /// Represents the result of a failed computation.
+      | Bad of 'TMessage list
 ---
 
 ![railway chessie](images/Railway_chessie.png)
@@ -228,13 +230,12 @@ Railway oriented programming
 
 ### Railways
 
-    use client = new DocumentClient(uri, password)
-    client
-    |> getDatabase "OlavsDemoDb"
+    use client = getDbClient
+    ok client
+    >>= tryCreateDatabase
     >>= getOrCreateCollectionSync client
     >>= getDocuments client
-    |> either showDocuments showErrorMessages
-    |> ignore
+    |> Logger.traceResult 
 ***
 
 
