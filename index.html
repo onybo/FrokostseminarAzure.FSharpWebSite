@@ -46,7 +46,6 @@
 <div class="tip" id="fs8">type &#39;T list = List&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.list&lt;_&gt;</div>
 <div class="tip" id="fs9">val jdoe : Person<br /><br />Full name: Document.jdoe</div>
 <div class="tip" id="fs10">val worker : Employee<br /><br />Full name: Document.worker</div>
-<div class="tip" id="fs11">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
 
         <!-- Any section element inside of this container is displayed as a slide -->
         <div class="slides">
@@ -59,11 +58,6 @@
 <p><img src="images/heart.svg" alt="love" /></p>
 
 <h1>F#</h1>
-
-<blockquote>
-  <p>hva blir dette
-- dette?</p>
-</blockquote>
 
 </section>
 
@@ -427,12 +421,18 @@
 <span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
+<span class="c">/// Represents the result of a computation.</span>
 <span class="k">type</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">TSuccess</span>, <span class="o">&#39;</span><span class="i">TMessage</span><span class="o">&gt;</span> <span class="o">=</span>
-| <span class="i">Ok</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">TSuccess</span> <span class="o">*</span> <span class="o">&#39;</span><span class="i">TMessage</span> <span onmouseout="hideTip(event, 'fs8', 18)" onmouseover="showTip(event, 'fs8', 18)" class="i">list</span>
-| <span class="i">Fail</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">TMessage</span> <span onmouseout="hideTip(event, 'fs8', 19)" onmouseover="showTip(event, 'fs8', 19)" class="i">list</span></pre>
+  <span class="c">/// Represents the result of a successful computation.</span>
+  | <span class="i">Ok</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">TSuccess</span> <span class="o">*</span> <span class="o">&#39;</span><span class="i">TMessage</span> <span onmouseout="hideTip(event, 'fs8', 18)" onmouseover="showTip(event, 'fs8', 18)" class="i">list</span>
+  <span class="c">/// Represents the result of a failed computation.</span>
+  | <span class="i">Bad</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">TMessage</span> <span onmouseout="hideTip(event, 'fs8', 19)" onmouseover="showTip(event, 'fs8', 19)" class="i">list</span></pre>
 </td>
 </tr>
 </table>
@@ -462,17 +462,15 @@
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-<span class="l">7: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">use</span> <span class="i">client</span> <span class="o">=</span> <span class="k">new</span> <span class="i">DocumentClient</span>(<span class="i">uri</span>, <span class="i">password</span>)
-<span class="i">client</span>
-<span class="o">|&gt;</span> <span class="i">getDatabase</span> <span class="s">&quot;</span><span class="s">OlavsDemoDb</span><span class="s">&quot;</span>
+<span class="k">use</span> <span class="i">client</span> <span class="o">=</span> <span class="i">getDbClient</span>
+<span class="i">ok</span> <span class="i">client</span>
+<span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">tryCreateDatabase</span>
 <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">getOrCreateCollectionSync</span> <span class="i">client</span>
 <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">getDocuments</span> <span class="i">client</span>
-<span class="o">|&gt;</span> <span class="i">either</span> <span class="i">showDocuments</span> <span class="i">showErrorMessages</span>
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 20)" onmouseover="showTip(event, 'fs11', 20)" class="i">ignore</span></pre>
+<span class="o">|&gt;</span> <span class="i">Logger</span><span class="o">.</span><span class="i">traceResult</span> </pre>
 </td>
 </tr>
 </table>
